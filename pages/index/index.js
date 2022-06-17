@@ -11,6 +11,7 @@ Page({
     userInfo: {},
     src:"../../assets/imgs/takephoto.jpg",
     takephoto_txt:"证据保全相机",
+    show:false
   },
 
   /**
@@ -35,6 +36,15 @@ Page({
       url: '../takePhoto/takePhoto'
     })
   },
+    /**
+   * 跳转到拍照界面
+   */
+  takePhoto2: function(){
+    this.setData({
+      show:!this.data.show
+    })
+  },
+
 
   /**
    * 用户点击右上角分享

@@ -13,3 +13,6 @@ page{
   margin-top: 220rpx; text-align: center; color: #333;
   font-size: 11pt;
 }
+.custom{
+  top: 80%;
+}

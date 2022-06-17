@@ -12,14 +12,14 @@
         <cover-image src='{{logo}}' class= 'takephoto' bindtap='takePhoto'> </cover-image>
       </cover-view>
    </cover-view>
-     <!--上部线条 -->
+    <!-- 上部线条 -->
     <cover-view class= 'biaochi' style = 'top:{{gap}}px; left:30px; width:{{width-30*2}}px; height:2px;'> </cover-view>
     <!--下部线条 -->
     <cover-view class= 'biaochi' style = 'top:{{gap+460}}px; left:30px; width:{{width-30*2}}px; height:2px;'> </cover-view>
      <!--右部线条 -->
     <cover-view class= 'biaochi' style = 'top:{{gap}}px; right:30px; width:2px; height:460px;'> </cover-view>
     <!--左部线条 -->
-    <cover-view class= 'biaochi' style = 'top:{{gap}}px; left:30px; width:2px; height:460px;'> </cover-view>
+    <cover-view class= 'biaochi' style = 'top:{{gap}}px; left:30px; width:2px; height:460px;'> </cover-view> 
   </camera>
 </view> 
 

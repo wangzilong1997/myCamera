@@ -1,0 +1,26 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+.bottom{
+  background: black;
+  margin-top: auto;
+  color: white;
+  height: 23%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.bottom-item{
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.take {
+  background: white;
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+}
