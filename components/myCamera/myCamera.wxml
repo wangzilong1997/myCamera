@@ -1,5 +1,6 @@
 
-<view wx:if="{{show}}">
+<cover-view>
+<cover-view wx:if="{{show}}">
   <camera device - position="back" flash = "off" style="width: 100vw; height:100vh;">
   <cover-view class="container">
     <cover-view class="top">
@@ -9,8 +10,8 @@
         取消
       </cover-view>
       <cover-view class="bottom-item" capture-bind:tap="take">
-        <view class="take">
-        </view>
+        <cover-view class="take">
+        </cover-view>
       </cover-view>
       <cover-view class="cancel bottom-item" capture-bind:tap="cancel">
         取消
@@ -18,4 +19,10 @@
     </cover-view>
   </cover-view>
   </camera>
-</view> 
+</cover-view> 
+<cover-view wx:if="{{cShow}}" class="makePic">
+  <view>
+    重拍
+  </view>
+</cover-view>
+</cover-view>

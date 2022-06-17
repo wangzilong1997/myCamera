@@ -24,3 +24,15 @@
   height: 132rpx;
   border-radius: 50%;
 }
+
+
+
+
+
+.makePic{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 10;
+}
