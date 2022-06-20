@@ -8,7 +8,7 @@ Component({
       type:Boolean,
       value:false
     },
-    picturecameraShow:{
+    pictureShow:{
       type:Boolean,
       value:false
     }
@@ -56,7 +56,7 @@ Component({
           that.setData({
             data:res.tempImagePath,
             cameraShow:false,
-            picturecameraShow:true
+            pictureShow:true
           })
           // wx.navigateTo({
           //   url: 'upload?path=' + res.tempImagePath + '&char=0'
@@ -67,13 +67,13 @@ Component({
     reTake:function(){
       this.setData({
         cameraShow:true,
-        picturecameraShow:false
+        pictureShow:false
       })
     },
     pic2Camera:function(){
       this.setData({
         cameraShow:true,
-        picturecameraShow:false
+        pictureShow:false
       })
     }
   }
