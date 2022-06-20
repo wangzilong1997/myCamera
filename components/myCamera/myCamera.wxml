@@ -1,10 +1,21 @@
 
-<view wx:if="{{cameraShow}}" class="myCamera">
+<view wx:if="{{cameraShow}}" class="myCamera" catchtouchmove="noneEnoughPeople">
   <camera device - position="back" flash = "off" style="width: 100vw; height:100vh;">
-  <cover-view class="container">
+  <!-- <cover-view class="container">
     <cover-view class="top">
     </cover-view>
-    <cover-view class="bottom">
+
+  </cover-view> -->
+  <cover-view class="watermark">
+    <cover-view class="watermark-item">
+      拍摄时间：{{currentTime}}
+    </cover-view>
+    <cover-view class="watermark-item">
+      项目名称：{{projectName}}
+    </cover-view>
+  </cover-view>
+  
+  <cover-view class="bottom">
       <cover-view class="cancel bottom-item" capture-bind:tap="cancel">
         取消
       </cover-view>
@@ -16,10 +27,9 @@
         取消
       </cover-view>
     </cover-view>
-  </cover-view>
   </camera>
 </view> 
-<view wx:if="{{pictureShow}}" class="myPicture">
+<view wx:if="{{pictureShow}}" class="myPicture" catchtouchmove="noneEnoughPeople">
   cShow
   <view bindtap="pic2Camera">
     返回

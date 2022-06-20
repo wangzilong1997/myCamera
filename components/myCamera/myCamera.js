@@ -18,7 +18,9 @@ Component({
    * 组件的初始数据
    */
   data: {
-
+    currentTime:'暂无数据～',
+    projectName:'暂无数据～',
+    timer:false,
   },
   lifetimes: {
     attached: function() {
@@ -28,6 +30,8 @@ Component({
       this.ctx = wx.createCameraContext()
       // 在组件实例进入页面节点树时执行
       console.log('在组件实例进入页面节点树时执行',this)
+
+
     },
     detached: function() {
       // 在组件实例被从页面节点树移除时执行
@@ -49,6 +53,7 @@ Component({
           picturePath:[]
         })
       }
+      clearTimeout(this.data.timer)
     },
     take:function(){
       var that = this
@@ -93,19 +98,47 @@ Component({
         // this.data.success(this.data.tempPicturePath)
         this.data.success({
           success:true,
-          picturePath:this.data.tempPicturePath
+          picturePath:[this.data.tempPicturePath]
         })
       }
       // func(this.data.tempPicturePath)
+      clearTimeout(this.data.timer)
     },
     takePhoto:function(params){
       if(!params){return}
       console.log('takePhoto',params)
       let { show,success } = params
+      var that = this
       this.setData({
         cameraShow:show,
-        success:success
+        success:success,
+        timer:setInterval(function () {
+        console.log('获取当前时间',that.formatDateTime(new Date()) )
+          // const _currentTime = moment().format("YYYY年MM月DD日 HH:mm:ss", util.formatTime(new Date()).split(" ")[1]);
+          that.setData({
+            currentTime: that.formatDateTime(new Date()) ,
+          });
+        }, 1000)
       })
+
+
+    },
+    noneEnoughPeople:function(){
+      return
+    },
+    formatDateTime:function(date) {  
+      var y = date.getFullYear();  
+      var m = date.getMonth() + 1;  
+      m = m < 10 ? ('0' + m) : m;  
+      var d = date.getDate();  
+      d = d < 10 ? ('0' + d) : d;  
+      var h = date.getHours();  
+      h=h < 10 ? ('0' + h) : h;  
+      var minute = date.getMinutes();  
+      minute = minute < 10 ? ('0' + minute) : minute;  
+      var second=date.getSeconds();  
+      second=second < 10 ? ('0' + second) : second;  
+      return y + '年' + m + '月' + d+'日 '+h+':'+minute+':'+second;  
     }
   }
 })

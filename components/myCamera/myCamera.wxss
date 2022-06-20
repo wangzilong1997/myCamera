@@ -6,12 +6,14 @@
 }
 .bottom{
   background: black;
-  margin-top: auto;
   color: white;
-  height: 23%;
+  height: 23vh;
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
 .bottom-item{
   flex: 1;
@@ -25,10 +27,6 @@
   border-radius: 50%;
 }
 
-
-
-
-
 .makePic{
   position: absolute;
   width: 100vw;
@@ -37,15 +35,30 @@
   z-index: 10;
 }
 .myCamera{
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background: black;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  overflow: hidden;
 }
 
 .myPicture{
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background: white;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.watermark{
+  position: fixed;
+  left: 5vw;
+  top: 70vh;
+  color: white;
 }
