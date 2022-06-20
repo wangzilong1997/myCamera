@@ -43,6 +43,12 @@ Component({
       this.setData({
         cameraShow:false
       })
+      if(this.data.success) {
+        this.data.success({
+          success:false,
+          picturePath:[]
+        })
+      }
     },
     take:function(){
       var that = this
@@ -54,7 +60,7 @@ Component({
             data: res.tempImagePath,
           })
           that.setData({
-            data:res.tempImagePath,
+            tempPicturePath:res.tempImagePath,
             cameraShow:false,
             pictureShow:true
           })
@@ -74,6 +80,31 @@ Component({
       this.setData({
         cameraShow:true,
         pictureShow:false
+      })
+    },
+    return2Picture:function(func){
+      console.log('return2Picture返回数据')
+      this.setData({
+        cameraShow:false,
+        pictureShow:false
+      })
+      this.triggerEvent('return2Picture', this.data.tempPicturePath)
+      if(this.data.success) {
+        // this.data.success(this.data.tempPicturePath)
+        this.data.success({
+          success:true,
+          picturePath:this.data.tempPicturePath
+        })
+      }
+      // func(this.data.tempPicturePath)
+    },
+    takePhoto:function(params){
+      if(!params){return}
+      console.log('takePhoto',params)
+      let { show,success } = params
+      this.setData({
+        cameraShow:show,
+        success:success
       })
     }
   }

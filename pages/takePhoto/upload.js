@@ -162,6 +162,7 @@ Page({
         wx.saveImageToPhotosAlbum({
           filePath: res.tempFilePath,
           success(e) {
+            console.log('保存成功',e,res.tempFilePath)
             wx.showToast({
               title: '保存成功',
               icon: 'none',

@@ -24,5 +24,10 @@
   <view bindtap="pic2Camera">
     返回
   </view>
+  <view bindtap="return2Picture">
+    确定
+  </view>
+  <image src="{{tempPicturePath}}">
+  </image>
 </view>
 

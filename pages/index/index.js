@@ -40,8 +40,15 @@ Page({
    * 跳转到拍照界面
    */
   takePhoto2: function(){
-    this.setData({
-      show:!this.data.show
+    // this.setData({
+    //   show:!this.data.show
+    // })
+    this.myCamera = this.selectComponent("#myCamera")
+    this.myCamera.takePhoto({
+      show:true,
+      success:(e) => {
+        console.log('父组件回调函数',e)
+      }
     })
   },
 
@@ -51,5 +58,11 @@ Page({
    */
   onShareAppMessage: function () {
     
+  },
+  return2Picture: function(e){
+    console.log('父组件回调函数返回',e)
+    this.myCamera = this.selectComponent("#myCamera")
+    this.myCamera.takePhoto()
+
   }
 })
