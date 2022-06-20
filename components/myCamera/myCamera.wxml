@@ -1,6 +1,5 @@
 
-<cover-view>
-<cover-view wx:if="{{show}}">
+<view wx:if="{{cameraShow}}" class="myCamera">
   <camera device - position="back" flash = "off" style="width: 100vw; height:100vh;">
   <cover-view class="container">
     <cover-view class="top">
@@ -19,10 +18,11 @@
     </cover-view>
   </cover-view>
   </camera>
-</cover-view> 
-<cover-view wx:if="{{cShow}}" class="makePic">
-  <view>
-    重拍
+</view> 
+<view wx:if="{{pictureShow}}" class="myPicture">
+  cShow
+  <view bindtap="pic2Camera">
+    返回
   </view>
-</cover-view>
-</cover-view>
+</view>
+

@@ -4,11 +4,11 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    show:{
+    cameraShow:{
       type:Boolean,
       value:false
     },
-    cShow:{
+    picturecameraShow:{
       type:Boolean,
       value:false
     }
@@ -41,7 +41,7 @@ Component({
     cancel:function(){
       console.log('cancel点击')
       this.setData({
-        show:false
+        cameraShow:false
       })
     },
     take:function(){
@@ -55,13 +55,25 @@ Component({
           })
           that.setData({
             data:res.tempImagePath,
-            show:false,
-            cShow:true
+            cameraShow:false,
+            picturecameraShow:true
           })
           // wx.navigateTo({
           //   url: 'upload?path=' + res.tempImagePath + '&char=0'
           // })
         }
+      })
+    },
+    reTake:function(){
+      this.setData({
+        cameraShow:true,
+        picturecameraShow:false
+      })
+    },
+    pic2Camera:function(){
+      this.setData({
+        cameraShow:true,
+        picturecameraShow:false
       })
     }
   }
