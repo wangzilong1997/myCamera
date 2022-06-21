@@ -62,3 +62,9 @@
   top: 70vh;
   color: white;
 }
+
+
+.image-canvas{
+  width: 100vw;
+  height: 100vh;
+}
