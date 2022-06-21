@@ -195,11 +195,20 @@ Component({
               if(!that.canvas){
                 that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
               }
+              // that.canvas.save()
+              that.canvas.beginPath()
+              // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
+              that.canvas.rect(0, 0, that.data.width, that.data.height - 150)
+              that.canvas.clip()
+
               that.canvas.drawImage(that.path, 0, 0, that.data.width/1, that.data.height/1)
    
               that.canvas.setFontSize(16);
               that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(that.data.currentTime, 20, 20)
+              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, 550)
+              that.canvas.setFontSize(16);
+              that.canvas.setFillStyle('#fff');
+              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, 570)
              
               // that.canvas.setFontSize(16)
               // that.canvas.setFillStyle('#fff')
@@ -213,6 +222,7 @@ Component({
               //   title: '数据处理中',
               //   mask: true
               // })
+
               that.canvas.setStrokeStyle('red')
               // 这里有一些很神奇的操作,总结就是MD拍出来的照片规格居然不是统一的
               //过渡页面中，对裁剪框的设定
