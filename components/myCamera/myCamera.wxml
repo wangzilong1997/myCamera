@@ -1,41 +1,28 @@
-
 <view wx:if="{{cameraShow}}" class="myCamera" catchtouchmove="noneEnoughPeople">
-  <camera device - position="back" flash = "off" style="width: 100vw; height:100vh;">
-  <!-- <cover-view class="container">
+  <camera device - position="back" flash="off" style="width: 100vw; height:100vh;">
+    <!-- <cover-view class="container">
     <cover-view class="top">
     </cover-view>
 
   </cover-view> -->
-  <cover-view class="watermark">
-    <cover-view class="watermark-item">
-      拍摄时间：{{currentTime}}
+    <cover-view class="watermark">
+      <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
+      <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
     </cover-view>
-    <cover-view class="watermark-item">
-      项目名称：{{projectName}}
-    </cover-view>
-  </cover-view>
-  
-  <cover-view class="bottom">
+    <cover-view class="bottom">
       <cover-view class="cancel bottom-item">
-        <cover-view capture-bind:tap="cancel">
-          取消
-        </cover-view>
+        <cover-view capture-bind:tap="cancel">取消</cover-view>
       </cover-view>
       <cover-view class="bottom-item">
-        <cover-view class="take"  capture-bind:tap="take">
-        </cover-view>
+        <cover-view class="take" capture-bind:tap="take"></cover-view>
       </cover-view>
-      <cover-view class="cancel bottom-item" >
-        <cover-view capture-bind:tap="cancel" wx:if="{{false}}">
-          取消
-        </cover-view>
+      <cover-view class="cancel bottom-item">
+        <cover-view capture-bind:tap="cancel" wx:if="{{false}}">取消</cover-view>
       </cover-view>
     </cover-view>
   </camera>
-</view> 
+</view>
 <view wx:if="{{pictureShow}}" class="myPicture" catchtouchmove="noneEnoughPeople">
-
-
   <!-- <image src="{{tempPicturePath}}">
   </image> -->
   <!-- <cover-view class="picBtns">
@@ -46,20 +33,14 @@
           确定
       </cover-view>
     </cover-view> -->
-  <canvas canvas-id="{{'image-canvas' + timestamp}}" class="image-canvas"> 
+  <canvas canvas-id="{{'image-canvas' + timestamp}}" class="image-canvas">
     <cover-view class="picBtns">
       <cover-view class="picBtn picBtnLeft">
-        <cover-view class="mybtn" capture-bind:tap="pic2Camera" >
-          重拍
-        </cover-view>
-
+        <cover-view class="mybtn" capture-bind:tap="reTake">重拍</cover-view>
       </cover-view>
       <cover-view class="picBtn picBtnRight">
-        <cover-view class="mybtn" capture-bind:tap="return2Picture">
-          使用照片
-        </cover-view>
+        <cover-view class="mybtn" capture-bind:tap="usePicture">使用照片</cover-view>
       </cover-view>
     </cover-view>
   </canvas>
 </view>
-

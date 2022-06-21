@@ -4,13 +4,13 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    cameraShow:{
-      type:Boolean,
-      value:false
+    cameraShow: {
+      type: Boolean,
+      value: false
     },
-    pictureShow:{
-      type:Boolean,
-      value:false
+    pictureShow: {
+      type: Boolean,
+      value: false
     }
   },
 
@@ -18,23 +18,30 @@ Component({
    * 组件的初始数据
    */
   data: {
-    currentTime:'暂无数据～',
-    projectName:'暂无数据～',
-    timer:false,
-    timestamp:'-1',
+    // 当前时间
+    currentTime: '暂无数据～',
+    // 当前项目
+    projectName: '暂无数据～',
+    // 定时器一秒钟更新一次当前时间
+    timer: false,
+    // 时间戳 为了保持canvas id唯一
+    timestamp: '-1',
+    // 控制是否可以使用图片
+    canUse:true,
+    // 临时相机拍下的照片所存的路径
+    tempPicturePath:''
   },
   lifetimes: {
-    attached: function() {
-      // var that = this
-      // that.ctx = wx.createCameraContext()
-      // ctx 绑定到相机实例
-      this.ctx = wx.createCameraContext()
+    attached: function () {
+
       // 在组件实例进入页面节点树时执行
-      console.log('在组件实例进入页面节点树时执行',this)
+      wx.getStorageSync('project_name') && this.setData({
+        projectName: wx.getStorageSync('project_name')
+      })
 
 
     },
-    detached: function() {
+    detached: function () {
       // 在组件实例被从页面节点树移除时执行
     },
   },
@@ -43,25 +50,35 @@ Component({
    */
   methods: {
     // 相机取消方法
-    cancel:function(){
+    cancel: function () {
       console.log('cancel点击')
       this.setData({
-        cameraShow:false
+        cameraShow: false
       })
-      if(this.data.success) {
+      if (this.data.success) {
         this.data.success({
-          success:false,
-          picturePath:[]
+          success: false,
+          picturePath: []
         })
       }
-      clearTimeout(this.data.timer)
+      this.stopTimer()
     },
     /**
      * 点击拍照按钮
      * 
      */
-    take:function(){
+    take: function () {
+      wx.showLoading({
+        title: '数据处理中...',
+        mask: true
+      })
+
       var that = this
+      // 创建相机
+      that.ctx = wx.createCameraContext()
+
+
+
       that.ctx.takePhoto({
         quality: 'high',
         success: (res) => {
@@ -70,144 +87,100 @@ Component({
             data: res.tempImagePath,
           })
           that.setData({
-            tempPicturePath:res.tempImagePath,
-            cameraShow:false,
-            pictureShow:true
+            tempPicturePath: res.tempImagePath,
+            cameraShow: false,
+            pictureShow: true
           })
-          clearTimeout(this.data.timer)
+          that.stopTimer()
+          // 生成canvas
           that.getCanvas(res.tempImagePath)
 
-          // wx.navigateTo({
-          //   url: 'upload?path=' + res.tempImagePath + '&char=0'
-          // })
         }
       })
     },
-    reTake:function(){
+    /**
+     * 照片界面返回相机
+     */
+    reTake: function () {
       this.setData({
-        cameraShow:true,
-        pictureShow:false
+        cameraShow: true,
+        pictureShow: false,
       })
+      this.beginTimer(this)
     },
-    pic2Camera:function(){
-      var that = this
-      this.setData({
-        cameraShow:true,
-        pictureShow:false,
-        timer:setInterval(function () {
-          // console.log('获取当前时间',that.formatDateTime(new Date()) )
-            // const _currentTime = moment().format("YYYY年MM月DD日 HH:mm:ss", util.formatTime(new Date()).split(" ")[1]);
-            that.setData({
-              currentTime: that.formatDateTime(new Date()) ,
-              timestamp: +new Date()
-            });
-          }, 1000)
-      })
-      this.canvas.clearRect(0, 0, this.data.width, this.data.height)
-    },
-    return2Picture:function(func){
+    /**
+     * 使用照片点击函数
+     * @param {*} func 
+     */
+    usePicture: function (func) {
       var that = this
       console.log('return2Picture返回数据')
-      this.setData({
-        cameraShow:false,
-        pictureShow:false
-      })
-      this.triggerEvent('return2Picture', this.data.tempPicturePath)
-      if(this.data.success) {
-        // this.data.success(this.data.tempPicturePath)
 
-        // 执行返回路径
-        var id = "image-canvas" + that.data.timestamp
-        console.log('id',id)
+      if (this.data.success && this.data.canUse) {
         that.data.success({
-          success:true,
-          picturePath:[this.data.result]
+          success: true,
+          picturePath: [this.data.result]
         })
-        // setTimeout( () => {
-        //   wx.canvasToTempFilePath({ //裁剪对参数
-        //     canvasId: id,
-        //     x: 0, //画布x轴起点
-        //     y: 0, //画布y轴起点
-        //     width: that.data.width, //画布宽度
-        //     height: that.data.height - 170, //画布高度
-        //     destWidth: that.data.width, //输出图片宽度
-        //     destHeight: that.data.height - 170, //输出图片高度
-        //     success: function (res) {
-        //       that.filePath = res.tempFilePath
-        //       //清除画布上在该矩形区域内的内容。
-        //       console.log(res.tempFilePath)
-        //       //在此可进行网络请求
-        //       that.data.success({
-        //         success:true,
-        //         picturePath:[res.tempFilePath]
-        //       })
-        //     },
-        //     fail: function (e) {
-        //      console.log('保存图片出错',e)
-        //     }
-        //   },that)
-        // },1000
-        // )
-
-
       }
+      this.setData({
+        cameraShow: false,
+        pictureShow: false,
+        canUse:false
+      })
       // func(this.data.tempPicturePath)
+      this.stopTimer()
+    },
+    /**
+     * 暂停计时器函数
+     */
+    stopTimer: function () {
       clearTimeout(this.data.timer)
+    },
+    /**
+     * 创建计时器函数
+     */
+    beginTimer: function(that){
+      that.setData({
+        timer: setInterval(function () {
+          // console.log('获取当前时间',that.formatDateTime(new Date()) )
+          // const _currentTime = moment().format("YYYY年MM月DD日 HH:mm:ss", util.formatTime(new Date()).split(" ")[1]);
+          that.setData({
+            currentTime: that.formatDateTime(new Date()),
+            timestamp: +new Date(),
+            canUse:true,
+          });
+        }, 1000)
+      })
     },
     /**
      * 
      * @param {object} params 
      * @returns 
      */
-    takePhoto:function(params){
-      if(!params){return}
-      console.log('takePhoto',params)
-      let { show,success } = params
+    takePhoto: function (params) {
+      if (!params) { return }
+      console.log('takePhoto', params)
+      let { show, success } = params
       var that = this
       this.setData({
-        cameraShow:show,
-        success:success,
-        timer:setInterval(function () {
-        // console.log('获取当前时间',that.formatDateTime(new Date()) )
-          // const _currentTime = moment().format("YYYY年MM月DD日 HH:mm:ss", util.formatTime(new Date()).split(" ")[1]);
-          that.setData({
-            currentTime: that.formatDateTime(new Date()) ,
-            timestamp: +new Date()
-          });
-        }, 1000)
+        cameraShow: show,
+        success: success,
       })
+      this.beginTimer(this)
 
 
     },
-    noneEnoughPeople:function(){
+    noneEnoughPeople: function () {
       return
     },
+
     /**
-     * 时间格式化函数
-     * @param {Date} date 
-     * @returns string
-     */
-    formatDateTime:function(date) {  
-      var y = date.getFullYear();  
-      var m = date.getMonth() + 1;  
-      m = m < 10 ? ('0' + m) : m;  
-      var d = date.getDate();  
-      d = d < 10 ? ('0' + d) : d;  
-      var h = date.getHours();  
-      h=h < 10 ? ('0' + h) : h;  
-      var minute = date.getMinutes();  
-      minute = minute < 10 ? ('0' + minute) : minute;  
-      var second=date.getSeconds();  
-      second=second < 10 ? ('0' + second) : second;  
-      return y + '年' + m + '月' + d+'日 '+h+':'+minute+':'+second;  
-    },
-    /**
-     * 获取canvas 并且绘制功能
+     * 获取canvas 并且绘制图片
      * @param {string} path 
      * @returns
      */
-    getCanvas:function(path){
-      console.log('获取canvas 并且绘制功能',path,"image-canvas" + this.data.timestamp,)
+    getCanvas: function (path) {
+      console.log('获取canvas 并且绘制功能', path, "image-canvas" + this.data.timestamp,)
       var that = this
       that.path = path
       wx.getSystemInfo({
@@ -224,7 +197,7 @@ Component({
             src: that.path,
             success: function (res) {
               that.canvas = null
-              if(!that.canvas){
+              if (!that.canvas) {
                 that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
               }
               // that.canvas.save()
@@ -233,38 +206,20 @@ Component({
               that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
               that.canvas.clip()
 
-              that.canvas.drawImage(that.path, 0, 0, that.data.width/1, that.data.height/1)
-   
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, 520)
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, 540)
-             
-              // that.canvas.setFontSize(16)
-              // that.canvas.setFillStyle('#fff')
-              // that.canvas.fillText('经度：'+ that.data.gps.longitude + ' 纬度：' + that.data.gps.latitude, 50, 475)
-  
-              // that.canvas.setFontSize(16)
-              // that.canvas.setFillStyle('#fff')
-              // that.canvas.fillText( that.data.district+ '附近', 50, 500)
-  
-              // wx.showLoading({
-              //   title: '数据处理中',
-              //   mask: true
-              // })
+              that.canvas.drawImage(that.path, 0, 0, that.data.width / 1, that.data.height / 1)
 
-              that.canvas.setStrokeStyle('red')
-              // 这里有一些很神奇的操作,总结就是MD拍出来的照片规格居然不是统一的
-              //过渡页面中，对裁剪框的设定
+              that.canvas.setFontSize(16);
+              that.canvas.setFillStyle('#fff');
+              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+              that.canvas.setFontSize(16);
+              that.canvas.setFillStyle('#fff');
+              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+
               that.canvas.draw()
-              wx.showLoading({
-                title: '处理中...',
-              })
+
               setTimeout(function () {
                 var id = "image-canvas" + that.data.timestamp
-                console.log('id',id)
+                console.log('id', id)
                 wx.canvasToTempFilePath({ //裁剪对参数
                   canvasId: id,
                   x: 0, //画布x轴起点
@@ -278,61 +233,40 @@ Component({
                     //清除画布上在该矩形区域内的内容。
                     console.log(res.tempFilePath)
                     that.setData({
-                      result:res.tempFilePath
+                      result: res.tempFilePath
                     })
                     wx.hideLoading()
                     //在此可进行网络请求
-
-                    //  保存到本地
-                    // wx.saveImageToPhotosAlbum({
-                    //   filePath: res.tempFilePath,
-                    //   success(e) {
-                    //     console.log('保存成功',e,res.tempFilePath)
-                    //     wx.showToast({
-                    //       title: '保存成功',
-                    //       icon: 'none',
-                    //       duration: 2000
-                    //     })
-                    //   },
-                    //   fail(e) {
-                    //     wx.getSetting({
-                    //       success(res) {
-                    //         if (!res.authSetting["scope.writePhotosAlbum"]) {
-                    //           wx.showModal({
-                    //             title: '警告',
-                    //             content: '请打开相册权限，否则无法保存图片到相册',
-                    //             success(res) {
-                    //               if (res.confirm) {
-                    //                 wx.openSetting({
-                    //                   success(res) {
-                    //                     console.log(res)
-                    //                   }
-                    //                 })
-                    //               } else if (res.cancel) {
-                    //                 wx.showToast({
-                    //                   title: '取消授权',
-                    //                   icon: "none",
-                    //                   duration: 2000
-                    //                 })
-                    //               }
-                    //             }
-                    //           })
-                    //         }
-                    //       }
-                    //     })
-                    //   }
-                    // })
-  
                   },
                   fail: function (e) {
-                   console.log('保存图片出错',e)
+                    console.log('保存图片出错', e)
+                    wx.hideLoading()
                   }
-                },that);
-              }, 1000);
+                }, that);
+              }, 0);
             }
           })
         }
       })
-    }
+    },
+    /**
+     * 时间格式化函数
+     * @param {Date} date 
+     * @returns string
+     */
+    formatDateTime: function (date) {
+      var y = date.getFullYear();
+      var m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      var d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      var h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      var minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      var second = date.getSeconds();
+      second = second < 10 ? ('0' + second) : second;
+      return y + '年' + m + '月' + d + '日 ' + h + ':' + minute + ':' + second;
+    },
   }
 })
