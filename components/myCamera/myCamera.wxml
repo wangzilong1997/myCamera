@@ -44,11 +44,16 @@
     </cover-view> -->
   <canvas canvas-id="{{'image-canvas' + timestamp}}" class="image-canvas"> 
     <cover-view class="picBtns">
-      <cover-view bindtap="pic2Camera">
-          返回
+      <cover-view class="picBtn picBtnLeft">
+        <cover-view class="mybtn" capture-bind:tap="pic2Camera" >
+          重拍
+        </cover-view>
+
       </cover-view>
-      <cover-view bindtap="return2Picture">
-          确定
+      <cover-view class="picBtn picBtnRight">
+        <cover-view class="mybtn" capture-bind:tap="return2Picture">
+          使用照片
+        </cover-view>
       </cover-view>
     </cover-view>
   </canvas>

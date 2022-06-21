@@ -198,17 +198,17 @@ Component({
               // that.canvas.save()
               that.canvas.beginPath()
               // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
-              that.canvas.rect(0, 0, that.data.width, that.data.height - 150)
+              that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
               that.canvas.clip()
 
               that.canvas.drawImage(that.path, 0, 0, that.data.width/1, that.data.height/1)
    
               that.canvas.setFontSize(16);
               that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, 550)
+              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, 520)
               that.canvas.setFontSize(16);
               that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, 570)
+              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, 540)
              
               // that.canvas.setFontSize(16)
               // that.canvas.setFillStyle('#fff')
