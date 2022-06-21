@@ -106,6 +106,7 @@ Component({
       this.canvas.clearRect(0, 0, this.data.width, this.data.height)
     },
     return2Picture:function(func){
+      var that = this
       console.log('return2Picture返回数据')
       this.setData({
         cameraShow:false,
@@ -114,10 +115,41 @@ Component({
       this.triggerEvent('return2Picture', this.data.tempPicturePath)
       if(this.data.success) {
         // this.data.success(this.data.tempPicturePath)
-        this.data.success({
+
+        // 执行返回路径
+        var id = "image-canvas" + that.data.timestamp
+        console.log('id',id)
+        that.data.success({
           success:true,
-          picturePath:[this.data.tempPicturePath]
+          picturePath:[this.data.result]
         })
+        // setTimeout( () => {
+        //   wx.canvasToTempFilePath({ //裁剪对参数
+        //     canvasId: id,
+        //     x: 0, //画布x轴起点
+        //     y: 0, //画布y轴起点
+        //     width: that.data.width, //画布宽度
+        //     height: that.data.height - 170, //画布高度
+        //     destWidth: that.data.width, //输出图片宽度
+        //     destHeight: that.data.height - 170, //输出图片高度
+        //     success: function (res) {
+        //       that.filePath = res.tempFilePath
+        //       //清除画布上在该矩形区域内的内容。
+        //       console.log(res.tempFilePath)
+        //       //在此可进行网络请求
+        //       that.data.success({
+        //         success:true,
+        //         picturePath:[res.tempFilePath]
+        //       })
+        //     },
+        //     fail: function (e) {
+        //      console.log('保存图片出错',e)
+        //     }
+        //   },that)
+        // },1000
+        // )
+
+
       }
       // func(this.data.tempPicturePath)
       clearTimeout(this.data.timer)
@@ -227,35 +259,76 @@ Component({
               // 这里有一些很神奇的操作,总结就是MD拍出来的照片规格居然不是统一的
               //过渡页面中，对裁剪框的设定
               that.canvas.draw()
-              // setTimeout(function () {
-              //   wx.canvasToTempFilePath({ //裁剪对参数
-              //     canvasId: "image-canvas",
-              //     x: that.data.gap, //画布x轴起点
-              //     y: that.data.gap, //画布y轴起点
-              //     width: that.data.width - 2 * that.data.gap, //画布宽度
-              //     height: 500, //画布高度
-              //     destWidth: that.data.width - 2 * that.data.gap, //输出图片宽度
-              //     destHeight: 500, //输出图片高度
-              //     canvasId: 'image-canvas',
-              //     success: function (res) {
-              //       that.filePath = res.tempFilePath
-              //       //清除画布上在该矩形区域内的内容。
-              //       that.canvas.clearRect(0, 0, that.data.width, that.data.height)
-              //       that.canvas.drawImage(that.filePath, that.data.gap, that.data.gap, that.data.width - that.data.gap * 2, 500)
-              //       that.canvas.draw() 
-              //       wx.hideLoading()
-              //       //在此可进行网络请求
+              wx.showLoading({
+                title: '处理中...',
+              })
+              setTimeout(function () {
+                var id = "image-canvas" + that.data.timestamp
+                console.log('id',id)
+                wx.canvasToTempFilePath({ //裁剪对参数
+                  canvasId: id,
+                  x: 0, //画布x轴起点
+                  y: 0, //画布y轴起点
+                  width: that.data.width, //画布宽度
+                  height: that.data.height - 170, //画布高度
+                  destWidth: that.data.width, //输出图片宽度
+                  destHeight: that.data.height - 170, //输出图片高度
+                  success: function (res) {
+                    that.filePath = res.tempFilePath
+                    //清除画布上在该矩形区域内的内容。
+                    console.log(res.tempFilePath)
+                    that.setData({
+                      result:res.tempFilePath
+                    })
+                    wx.hideLoading()
+                    //在此可进行网络请求
+
+                    //  保存到本地
+                    // wx.saveImageToPhotosAlbum({
+                    //   filePath: res.tempFilePath,
+                    //   success(e) {
+                    //     console.log('保存成功',e,res.tempFilePath)
+                    //     wx.showToast({
+                    //       title: '保存成功',
+                    //       icon: 'none',
+                    //       duration: 2000
+                    //     })
+                    //   },
+                    //   fail(e) {
+                    //     wx.getSetting({
+                    //       success(res) {
+                    //         if (!res.authSetting["scope.writePhotosAlbum"]) {
+                    //           wx.showModal({
+                    //             title: '警告',
+                    //             content: '请打开相册权限，否则无法保存图片到相册',
+                    //             success(res) {
+                    //               if (res.confirm) {
+                    //                 wx.openSetting({
+                    //                   success(res) {
+                    //                     console.log(res)
+                    //                   }
+                    //                 })
+                    //               } else if (res.cancel) {
+                    //                 wx.showToast({
+                    //                   title: '取消授权',
+                    //                   icon: "none",
+                    //                   duration: 2000
+                    //                 })
+                    //               }
+                    //             }
+                    //           })
+                    //         }
+                    //       }
+                    //     })
+                    //   }
+                    // })
   
-              //     },
-              //     fail: function (e) {
-              //       wx.hideLoading()
-              //       wx.showToast({
-              //         title: '出错啦...',
-              //         icon: 'loading'
-              //       })
-              //     }
-              //   });
-              // }, 1000);
+                  },
+                  fail: function (e) {
+                   console.log('保存图片出错',e)
+                  }
+                },that);
+              }, 1000);
             }
           })
         }
