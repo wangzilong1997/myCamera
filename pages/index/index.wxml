@@ -5,5 +5,7 @@
 <!-- <my-camera id="myCamera" cameraShow="{{show}}" bind:return2Picture="return2Picture"></my-camera> -->
 <my-camera id="myCamera"></my-camera> 
 <view class='takephoto_txt'>{{takephoto_txt}}</view> 
+<image src='{{imageUrl}}'>
+</image>
 
 

@@ -33,7 +33,9 @@ Component({
   },
   lifetimes: {
     attached: function () {
-
+      console.log('thissssss',this)
+      // 创建相机
+      this.ctx = wx.createCameraContext()
       // 在组件实例进入页面节点树时执行
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
@@ -68,16 +70,12 @@ Component({
      * 
      */
     take: function () {
-      wx.showLoading({
-        title: '数据处理中...',
-        mask: true
-      })
+      // wx.showLoading({
+      //   title: '数据处理中...',
+      //   mask: true
+      // })
 
-      var that = this
-      // 创建相机
-      that.ctx = wx.createCameraContext()
-
-
+      let that = this
 
       that.ctx.takePhoto({
         quality: 'high',
@@ -93,7 +91,7 @@ Component({
           })
           that.stopTimer()
           // 生成canvas
-          that.getCanvas(res.tempImagePath)
+          that.getCanvas(res.tempImagePath,that)
 
         }
       })
@@ -179,10 +177,8 @@ Component({
      * @param {string} path 
      * @returns
      */
-    getCanvas: function (path) {
-      console.log('获取canvas 并且绘制功能', path, "image-canvas" + this.data.timestamp,)
-      var that = this
-      that.path = path
+    getCanvas: function (path,that) {
+      console.log('获取canvas 并且绘制功能', path, "image-canvas" + that.data.timestamp,)
       wx.getSystemInfo({
         success: function (res) {
           var width = res.windowWidth
@@ -193,59 +189,137 @@ Component({
             height: height,
             gap: gap
           })
-          wx.getImageInfo({
-            src: that.path,
-            success: function (res) {
-              that.canvas = null
-              if (!that.canvas) {
-                that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
-              }
-              // that.canvas.save()
-              that.canvas.beginPath()
-              // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
-              that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
-              that.canvas.clip()
+          // that.canvas = null
+          // if (!that.canvas) {
+          //   that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          // }
+          that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          console.log('that.canvas',that.canvas)
+          // that.canvas.save()
+          // that.canvas.beginPath()
+          // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
+          that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
+          that.canvas.clip()
 
-              that.canvas.drawImage(that.path, 0, 0, that.data.width / 1, that.data.height / 1)
+          that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
 
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          that.canvas.setFontSize(16);
+          that.canvas.setFillStyle('#fff');
+          that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+          that.canvas.setFontSize(16);
+          that.canvas.setFillStyle('#fff');
+          that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          // var id = "image-canvas" + that.data.timestamp
+          // setTimeout(() => {
+          //   that.canvas.draw(true, setTimeout(() => {
+          //   wx.canvasToTempFilePath({ //裁剪对参数
+          //     canvasId: id,
+          //     x: 0, //画布x轴起点
+          //     y: 0, //画布y轴起点
+          //     width: that.data.width, //画布宽度
+          //     height: that.data.height - 170, //画布高度
+          //     destWidth: that.data.width, //输出图片宽度
+          //     destHeight: that.data.height - 170, //输出图片高度
+          //     success: function (res) {
+          //       that.filePath = res.tempFilePath
+          //       //清除画布上在该矩形区域内的内容。
+          //       console.log(res.tempFilePath)
+          //       that.setData({
+          //         result: res.tempFilePath
+          //       })
+          //       wx.hideLoading()
+          //       //在此可进行网络请求
+          //     },
+          //     fail: function (e) {
+          //       console.log('保存图片出错', e)
+          //       wx.hideLoading()
+          //     }
+          //   }, that);
+          //   },300))
+          // }, 200)
+          that.canvas.draw()
+          // wx.getImageInfo({
+          //   src: path,
+          //   success: function (res) {
+          //     console.log('getImageInfo',res)
+          //     that.canvas = null
+          //     if (!that.canvas) {
+          //       that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          //     }
+          //     console.log('that.canvas',that.canvas)
+          //     // that.canvas.save()
+          //     // that.canvas.beginPath()
+          //     // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
+          //     that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
+          //     that.canvas.clip()
 
-              that.canvas.draw()
+          //     that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
 
-              setTimeout(function () {
-                var id = "image-canvas" + that.data.timestamp
-                console.log('id', id)
-                wx.canvasToTempFilePath({ //裁剪对参数
-                  canvasId: id,
-                  x: 0, //画布x轴起点
-                  y: 0, //画布y轴起点
-                  width: that.data.width, //画布宽度
-                  height: that.data.height - 170, //画布高度
-                  destWidth: that.data.width, //输出图片宽度
-                  destHeight: that.data.height - 170, //输出图片高度
-                  success: function (res) {
-                    that.filePath = res.tempFilePath
-                    //清除画布上在该矩形区域内的内容。
-                    console.log(res.tempFilePath)
-                    that.setData({
-                      result: res.tempFilePath
-                    })
-                    wx.hideLoading()
-                    //在此可进行网络请求
-                  },
-                  fail: function (e) {
-                    console.log('保存图片出错', e)
-                    wx.hideLoading()
-                  }
-                }, that);
-              }, 0);
-            }
-          })
+          //     that.canvas.setFontSize(16);
+          //     that.canvas.setFillStyle('#fff');
+          //     that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+          //     that.canvas.setFontSize(16);
+          //     that.canvas.setFillStyle('#fff');
+          //     that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          //     // var id = "image-canvas" + that.data.timestamp
+          //     // setTimeout(() => {
+          //     //   that.canvas.draw(true, setTimeout(() => {
+          //     //   wx.canvasToTempFilePath({ //裁剪对参数
+          //     //     canvasId: id,
+          //     //     x: 0, //画布x轴起点
+          //     //     y: 0, //画布y轴起点
+          //     //     width: that.data.width, //画布宽度
+          //     //     height: that.data.height - 170, //画布高度
+          //     //     destWidth: that.data.width, //输出图片宽度
+          //     //     destHeight: that.data.height - 170, //输出图片高度
+          //     //     success: function (res) {
+          //     //       that.filePath = res.tempFilePath
+          //     //       //清除画布上在该矩形区域内的内容。
+          //     //       console.log(res.tempFilePath)
+          //     //       that.setData({
+          //     //         result: res.tempFilePath
+          //     //       })
+          //     //       wx.hideLoading()
+          //     //       //在此可进行网络请求
+          //     //     },
+          //     //     fail: function (e) {
+          //     //       console.log('保存图片出错', e)
+          //     //       wx.hideLoading()
+          //     //     }
+          //     //   }, that);
+          //     //   },300))
+          //     // }, 200)
+          //     that.canvas.draw()
+
+          //     // setTimeout(function () {
+          //     //   var id = "image-canvas" + that.data.timestamp
+          //     //   console.log('id', id)
+          //     //   wx.canvasToTempFilePath({ //裁剪对参数
+          //     //     canvasId: id,
+          //     //     x: 0, //画布x轴起点
+          //     //     y: 0, //画布y轴起点
+          //     //     width: that.data.width, //画布宽度
+          //     //     height: that.data.height - 170, //画布高度
+          //     //     destWidth: that.data.width, //输出图片宽度
+          //     //     destHeight: that.data.height - 170, //输出图片高度
+          //     //     success: function (res) {
+          //     //       that.filePath = res.tempFilePath
+          //     //       //清除画布上在该矩形区域内的内容。
+          //     //       console.log(res.tempFilePath)
+          //     //       that.setData({
+          //     //         result: res.tempFilePath
+          //     //       })
+          //     //       wx.hideLoading()
+          //     //       //在此可进行网络请求
+          //     //     },
+          //     //     fail: function (e) {
+          //     //       console.log('保存图片出错', e)
+          //     //       wx.hideLoading()
+          //     //     }
+          //     //   }, that);
+          //     // }, 100);
+          //   }
+          // })
         }
       })
     },
