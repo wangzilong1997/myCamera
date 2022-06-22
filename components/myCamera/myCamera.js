@@ -193,26 +193,86 @@ Component({
             height: height,
             gap: gap
           })
-          // that.canvas = null
-          // if (!that.canvas) {
-          //   that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
-          // }
-          that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
-          console.log('that.canvas',that.canvas)
-          // that.canvas.save()
-          // that.canvas.beginPath()
-          // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
-          that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
-          that.canvas.clip()
+          // that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
+          // console.log('that.canvas',that.canvas)
+          // that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
+          // that.canvas.clip()
 
-          that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+          // that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
 
-          that.canvas.setFontSize(16);
-          that.canvas.setFillStyle('#fff');
-          that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
-          that.canvas.setFontSize(16);
-          that.canvas.setFillStyle('#fff');
-          that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          // that.canvas.setFontSize(16);
+          // that.canvas.setFillStyle('#fff');
+          // that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+          // that.canvas.setFontSize(16);
+          // that.canvas.setFillStyle('#fff');
+          // that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          // that.canvas.draw()
+
+          var id = "#canvasid"
+          wx.createSelectorQuery()
+            .select("#canvasid")
+            .fields({ node: true, size: true })
+            .exec((res) => {
+                // Canvas 对象
+                const canvas = res[0].node
+                // 渲染上下文
+                const ctx = canvas.getContext('2d')
+
+                // Canvas 画布的实际绘制宽高
+                const width = res[0].width
+                const height = res[0].height
+
+                // 初始化画布大小
+                const dpr = wx.getWindowInfo().pixelRatio
+                canvas.width = width * dpr
+                canvas.height = height * dpr
+                ctx.scale(dpr, dpr)
+
+                // 清空画布
+                ctx.clearRect(0, 0, width, height)
+
+                // 绘制红色正方形
+                ctx.fillStyle = 'rgb(200, 0, 0)';
+                ctx.fillRect(10, 10, 50, 50);
+
+                // 绘制蓝色半透明正方形
+                ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+                ctx.fillRect(30, 30, 50, 50);
+            })
+            // .fields({node:true,size:true})
+            // .exec((res) => {
+            //   console.log('resss',res,id)
+            //   // Canvas 对象
+            //   const canvas = res[0].node
+            //   // Canvas 画布的实际绘制宽高
+            //   const renderWidth = res[0].width
+            //   const renderHeight = res[0].height
+            //   // Canvas 绘制上下文
+            //   const ctx = canvas.getContext('2d')
+
+            //   // 初始化画布大小
+            //   const dpr = wx.getWindowInfo().pixelRatio
+            //   canvas.width = renderWidth * dpr
+            //   canvas.height = renderHeight * dpr
+            //   ctx.scale(dpr, dpr)
+            //   const image = canvas.createImage()
+            //   image.onload = () => {
+            //       context.drawImage(
+            //           path,
+            //           0,
+            //           0,
+            //           150,
+            //           100,
+            //       )
+            //   }
+
+            //   context.draw(false, () => {
+            //       // 这里绘制完成
+            //       console.log('draw done')
+            //   })
+            // })
+
+
           // var id = "canvasid" + that.data.timestamp
           // setTimeout(() => {
           //   that.canvas.draw(true, setTimeout(() => {
@@ -241,7 +301,7 @@ Component({
           //   }, that);
           //   },300))
           // }, 200)
-          that.canvas.draw()
+
           // wx.getImageInfo({
           //   src: path,
           //   success: function (res) {

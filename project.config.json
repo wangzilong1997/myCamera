@@ -42,7 +42,7 @@
     "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.14.1",
+  "libVersion": "2.24.5",
   "appid": "wx20839c87d590c4c5",
   "projectname": "lezhi",
   "isGameTourist": false,
