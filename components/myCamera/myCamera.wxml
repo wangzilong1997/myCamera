@@ -33,7 +33,7 @@
           确定
       </cover-view>
     </cover-view> -->
-  <canvas canvas-id="{{'image-canvas' + timestamp}}" class="image-canvas">
+  <canvas canvas-id="{{'image-canvas'}}" class="image-canvas">
     <cover-view class="picBtns">
       <cover-view class="picBtn picBtnLeft">
         <cover-view class="mybtn" capture-bind:tap="reTake">重拍</cover-view>

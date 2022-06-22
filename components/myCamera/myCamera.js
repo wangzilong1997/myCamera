@@ -1,5 +1,14 @@
 // components/myCamera/myCamera.js
 Component({
+  // ready:function(){
+  //   const ctx = wx.createCanvasContext("image-canvas", this /* 它很重要 */);
+
+  //   ctx.setFontSize(20);
+  //   ctx.fillText("Hello", 20, 20);
+  //   ctx.fillText("MINA", 100, 100);
+
+  //   ctx.draw();
+  // },
   /**
    * 组件的属性列表
    */
@@ -41,6 +50,12 @@ Component({
         projectName: wx.getStorageSync('project_name')
       })
 
+      const ctx = wx.createCanvasContext("image-canvas", this /* 它很重要 */);
+
+      ctx.setFillStyle('red')
+      ctx.fillRect(10, 10, 150, 75)
+  
+      ctx.draw();
 
     },
     detached: function () {
@@ -158,11 +173,12 @@ Component({
     takePhoto: function (params) {
       if (!params) { return }
       console.log('takePhoto', params)
-      let { show, success } = params
+      let { show, success,_that } = params
       var that = this
       this.setData({
         cameraShow: show,
         success: success,
+        _that:_that
       })
       this.beginTimer(this)
 
@@ -189,26 +205,23 @@ Component({
             height: height,
             gap: gap
           })
-          // that.canvas = null
-          // if (!that.canvas) {
-          //   that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
-          // }
-          that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
-          console.log('that.canvas',that.canvas)
-          // that.canvas.save()
-          // that.canvas.beginPath()
-          // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
-          that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
-          that.canvas.clip()
+          // that.canvas = wx.createCanvasContext("image-canvas", that)
+          // console.log('that.canvas',that.canvas)
 
-          that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+          // that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
+          // that.canvas.clip()
+          
+          // that.canvas.setFillStyle('red')
+          // that.canvas.fillRect(10, 10, 150, 75)
 
-          that.canvas.setFontSize(16);
-          that.canvas.setFillStyle('#fff');
-          that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
-          that.canvas.setFontSize(16);
-          that.canvas.setFillStyle('#fff');
-          that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+          // that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+
+          // that.canvas.setFontSize(16);
+          // that.canvas.setFillStyle('#fff');
+          // that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+          // that.canvas.setFontSize(16);
+          // that.canvas.setFillStyle('#fff');
+          // that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
           // var id = "image-canvas" + that.data.timestamp
           // setTimeout(() => {
           //   that.canvas.draw(true, setTimeout(() => {
@@ -237,7 +250,7 @@ Component({
           //   }, that);
           //   },300))
           // }, 200)
-          that.canvas.draw()
+          // that.canvas.draw()
           // wx.getImageInfo({
           //   src: path,
           //   success: function (res) {
