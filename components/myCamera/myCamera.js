@@ -29,7 +29,8 @@ Component({
     // 控制是否可以使用图片
     canUse:true,
     // 临时相机拍下的照片所存的路径
-    tempPicturePath:''
+    tempPicturePath:'',
+    _that:this
   },
   lifetimes: {
     attached: function () {
@@ -39,6 +40,9 @@ Component({
       // 在组件实例进入页面节点树时执行
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
+      })
+      this.setData({
+        _that:this
       })
 
 
@@ -91,7 +95,7 @@ Component({
           })
           that.stopTimer()
           // 生成canvas
-          that.getCanvas(res.tempImagePath,that)
+          that.getCanvas(res.tempImagePath,that.data._that)
 
         }
       })
@@ -178,7 +182,7 @@ Component({
      * @returns
      */
     getCanvas: function (path,that) {
-      console.log('获取canvas 并且绘制功能', path, "image-canvas" + that.data.timestamp,)
+      console.log('获取canvas 并且绘制功能', path, "canvasid" + that.data.timestamp,)
       wx.getSystemInfo({
         success: function (res) {
           var width = res.windowWidth
@@ -191,9 +195,9 @@ Component({
           })
           // that.canvas = null
           // if (!that.canvas) {
-          //   that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          //   that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
           // }
-          that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
           console.log('that.canvas',that.canvas)
           // that.canvas.save()
           // that.canvas.beginPath()
@@ -209,7 +213,7 @@ Component({
           that.canvas.setFontSize(16);
           that.canvas.setFillStyle('#fff');
           that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
-          // var id = "image-canvas" + that.data.timestamp
+          // var id = "canvasid" + that.data.timestamp
           // setTimeout(() => {
           //   that.canvas.draw(true, setTimeout(() => {
           //   wx.canvasToTempFilePath({ //裁剪对参数
@@ -244,7 +248,7 @@ Component({
           //     console.log('getImageInfo',res)
           //     that.canvas = null
           //     if (!that.canvas) {
-          //       that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+          //       that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
           //     }
           //     console.log('that.canvas',that.canvas)
           //     // that.canvas.save()
@@ -261,7 +265,7 @@ Component({
           //     that.canvas.setFontSize(16);
           //     that.canvas.setFillStyle('#fff');
           //     that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
-          //     // var id = "image-canvas" + that.data.timestamp
+          //     // var id = "canvasid" + that.data.timestamp
           //     // setTimeout(() => {
           //     //   that.canvas.draw(true, setTimeout(() => {
           //     //   wx.canvasToTempFilePath({ //裁剪对参数
@@ -292,7 +296,7 @@ Component({
           //     that.canvas.draw()
 
           //     // setTimeout(function () {
-          //     //   var id = "image-canvas" + that.data.timestamp
+          //     //   var id = "canvasid" + that.data.timestamp
           //     //   console.log('id', id)
           //     //   wx.canvasToTempFilePath({ //裁剪对参数
           //     //     canvasId: id,
