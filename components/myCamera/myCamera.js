@@ -44,10 +44,6 @@ Component({
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
       })
-
-
-    
-
     },
     detached: function () {
       // 在组件实例被从页面节点树移除时执行
@@ -59,7 +55,7 @@ Component({
       if(cameraShow){
         // 获取手机方向
         wx.startDeviceMotionListening({
-          interval: 'game',
+          interval: 'normal',
           success:function(e){
             wx.onDeviceMotionChange((result) => {
               console.log('获取手机方向数据',result)
@@ -76,11 +72,20 @@ Component({
                 })
               }
             })
+          },
+          fail:function(e){
+            console.log('重新调用手机方向失败',e)
           }
         })
       }else{
         // 取消监听
         wx.offDeviceMotionChange()
+        wx.stopDeviceMotionListening({
+          success: (res) => {
+            console.log('关闭手机方向监听',res)
+          },
+        })
+
       }
     }
   },
@@ -107,6 +112,9 @@ Component({
      * 
      */
     take: function () {
+
+      // wx.offDeviceMotionChange()
+
       wx.showLoading({
         title: '数据处理中...',
         mask: true
@@ -142,10 +150,31 @@ Component({
      * 照片界面返回相机
      */
     reTake: function () {
+      var that = this
       this.setData({
         cameraShow: true,
         pictureShow: false,
       })
+      // wx.startDeviceMotionListening({
+      //   interval: 'game',
+      //   success:function(e){
+      //     wx.onDeviceMotionChange((result) => {
+      //       console.log('获取手机方向数据',result)
+      //       if(result.beta > 45 || result.beta < -45){
+      //         // console.log('竖屏')
+      //         that.setData({
+      //           portrait:true,
+      //           landscape:false,
+      //         })
+      //       }else{
+      //         that.setData({
+      //           portrait:false,
+      //           landscape:true,
+      //         })
+      //       }
+      //     })
+      //   }
+      // })
       this.beginTimer(this)
     },
     /**
