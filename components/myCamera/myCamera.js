@@ -27,16 +27,24 @@ Component({
     // 时间戳 为了保持canvas id唯一
     timestamp: '-1',
     // 控制是否可以使用图片
-    canUse:true,
+    canUse: true,
     // 临时相机拍下的照片所存的路径
+<<<<<<< HEAD
     tempPicturePath:'',
     _that:this
+=======
+    tempPicturePath: '',
+
+    // 横屏竖屏相关参数
+    // 竖屏幕
+    portrait:false,
+    // 横屏幕
+    landscape:false ,
+>>>>>>> feature/rotate-photo
   },
   lifetimes: {
     attached: function () {
-      console.log('thissssss',this)
-      // 创建相机
-      this.ctx = wx.createCameraContext()
+      var that = this
       // 在组件实例进入页面节点树时执行
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
@@ -46,10 +54,43 @@ Component({
       })
 
 
+    
+
     },
     detached: function () {
       // 在组件实例被从页面节点树移除时执行
     },
+  },
+  observers:{
+    'cameraShow':function(cameraShow){
+      var that = this
+      if(cameraShow){
+        // 获取手机方向
+        wx.startDeviceMotionListening({
+          interval: 'game',
+          success:function(e){
+            wx.onDeviceMotionChange((result) => {
+              console.log('获取手机方向数据',result)
+              if(result.beta > 45 || result.beta < -45){
+                // console.log('竖屏')
+                that.setData({
+                  portrait:true,
+                  landscape:false,
+                })
+              }else{
+                that.setData({
+                  portrait:false,
+                  landscape:true,
+                })
+              }
+            })
+          }
+        })
+      }else{
+        // 取消监听
+        wx.offDeviceMotionChange()
+      }
+    }
   },
   /**
    * 组件的方法列表
@@ -74,12 +115,17 @@ Component({
      * 
      */
     take: function () {
-      // wx.showLoading({
-      //   title: '数据处理中...',
-      //   mask: true
-      // })
+      wx.showLoading({
+        title: '数据处理中...',
+        mask: true
+      })
 
-      let that = this
+
+      var that = this
+      // 创建相机
+      that.ctx = wx.createCameraContext()
+
+
 
       that.ctx.takePhoto({
         quality: 'high',
@@ -95,7 +141,11 @@ Component({
           })
           that.stopTimer()
           // 生成canvas
+<<<<<<< HEAD
           that.getCanvas(res.tempImagePath,that.data._that)
+=======
+          that.getCanvas(res.tempImagePath, that)
+>>>>>>> feature/rotate-photo
 
         }
       })
@@ -127,7 +177,7 @@ Component({
       this.setData({
         cameraShow: false,
         pictureShow: false,
-        canUse:false
+        canUse: false
       })
       // func(this.data.tempPicturePath)
       this.stopTimer()
@@ -141,7 +191,7 @@ Component({
     /**
      * 创建计时器函数
      */
-    beginTimer: function(that){
+    beginTimer: function (that) {
       that.setData({
         timer: setInterval(function () {
           // console.log('获取当前时间',that.formatDateTime(new Date()) )
@@ -149,7 +199,7 @@ Component({
           that.setData({
             currentTime: that.formatDateTime(new Date()),
             timestamp: +new Date(),
-            canUse:true,
+            canUse: true,
           });
         }, 1000)
       })
@@ -181,8 +231,13 @@ Component({
      * @param {string} path 
      * @returns
      */
+<<<<<<< HEAD
     getCanvas: function (path,that) {
       console.log('获取canvas 并且绘制功能', path, "canvasid" + that.data.timestamp,)
+=======
+    getCanvas: function (path, that) {
+      console.log('获取canvas 并且绘制功能', path, "image-canvas" + that.data.timestamp,)
+>>>>>>> feature/rotate-photo
       wx.getSystemInfo({
         success: function (res) {
           var width = res.windowWidth
@@ -193,6 +248,7 @@ Component({
             height: height,
             gap: gap
           })
+<<<<<<< HEAD
           // that.canvas = null
           // if (!that.canvas) {
           //   that.canvas = wx.createCanvasContext("canvasid" + that.data.timestamp, that)
@@ -204,9 +260,42 @@ Component({
           // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
           that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
           that.canvas.clip()
+=======
+          wx.getImageInfo({
+            src: path,
+            success: function (res) {
+              console.log('getImageInfo', res, that)
+              // that.canvas = null
+              // if (!that.canvas) {
+              //   that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+              // }
+              that.canvas = wx.createCanvasContext("image-canvas" + that.data.timestamp, that)
+              // that.canvas.save()
+              that.canvas.beginPath()
+              // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
+              that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
+              that.canvas.clip()
 
-          that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
 
+
+              that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+              // 竖屏拍摄文字
+              if(that.data.portrait) {
+                that.canvas.setFillStyle('rgba(0, 0, 0,.3)')
+                that.canvas.fillRect(20, that.data.height - 215, 280, 40)
+>>>>>>> feature/rotate-photo
+
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+                that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+              }else{
+                // if(that.data.landscape)
+                // 横屏拍摄文字
+
+<<<<<<< HEAD
           that.canvas.setFontSize(16);
           that.canvas.setFillStyle('#fff');
           that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
@@ -256,9 +345,17 @@ Component({
           //     // that.canvas.arc(50, 50, 25, 0, 2*Math.PI)
           //     that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
           //     that.canvas.clip()
+=======
+                that.canvas.setFillStyle('rgba(0, 0, 0,.3)')
+                that.canvas.fillRect(6, 15, 40, 280)
+>>>>>>> feature/rotate-photo
 
-          //     that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
 
+<<<<<<< HEAD
           //     that.canvas.setFontSize(16);
           //     that.canvas.setFillStyle('#fff');
           //     that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
@@ -324,6 +421,47 @@ Component({
           //     // }, 100);
           //   }
           // })
+=======
+                that.canvas.rotate(Math.PI * 180 / 360)
+
+                that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, -30)
+                that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, -10)
+
+              }
+
+
+              that.canvas.draw()
+
+              setTimeout(function () {
+                var id = "image-canvas" + that.data.timestamp
+                console.log('id', id)
+                wx.canvasToTempFilePath({ //裁剪对参数
+                  canvasId: id,
+                  x: 0, //画布x轴起点
+                  y: 0, //画布y轴起点
+                  width: that.data.width, //画布宽度
+                  height: that.data.height - 170, //画布高度
+                  destWidth: that.data.width, //输出图片宽度
+                  destHeight: that.data.height - 170, //输出图片高度
+                  success: function (res) {
+                    that.filePath = res.tempFilePath
+                    //清除画布上在该矩形区域内的内容。
+                    console.log(res.tempFilePath)
+                    that.setData({
+                      result: res.tempFilePath
+                    })
+                    wx.hideLoading()
+                    //在此可进行网络请求
+                  },
+                  fail: function (e) {
+                    console.log('保存图片出错', e)
+                    wx.hideLoading()
+                  }
+                }, that);
+              }, 100);
+            }
+          })
+>>>>>>> feature/rotate-photo
         }
       })
     },

@@ -48,6 +48,7 @@ Page({
     this.myCamera = this.selectComponent("#myCamera")
     this.myCamera.takePhoto({
       show:true,
+      _that:that,
       success:(e) => {
         console.log('父组件回调函数',e)
         e.picturePath[0] && that.setData({

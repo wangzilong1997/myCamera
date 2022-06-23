@@ -5,10 +5,17 @@
     </cover-view>
 
   </cover-view> -->
-    <cover-view class="watermark">
+    <!-- 竖屏 -->
+    <cover-view class="watermark-portrait" wx:if="{{portrait}}">
       <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
       <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
     </cover-view>
+    <!-- 横屏 -->
+    <cover-view class="watermark-landscape" wx:if="{{landscape}}">
+      <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
+      <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
+    </cover-view>
+
     <cover-view class="bottom">
       <cover-view class="cancel bottom-item">
         <cover-view capture-bind:tap="cancel">取消</cover-view>
