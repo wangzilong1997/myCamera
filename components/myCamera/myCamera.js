@@ -29,21 +29,60 @@ Component({
     // 控制是否可以使用图片
     canUse: true,
     // 临时相机拍下的照片所存的路径
-    tempPicturePath: ''
+    tempPicturePath: '',
+
+    // 横屏竖屏相关参数
+    // 竖屏幕
+    portrait:false,
+    // 横屏幕
+    landscape:false,
   },
   lifetimes: {
     attached: function () {
-
+      var that = this
       // 在组件实例进入页面节点树时执行
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
       })
 
 
+    
+
     },
     detached: function () {
       // 在组件实例被从页面节点树移除时执行
     },
+  },
+  observers:{
+    'cameraShow':function(cameraShow){
+      var that = this
+      if(cameraShow){
+        // 获取手机方向
+        wx.startDeviceMotionListening({
+          interval: 'game',
+          success:function(e){
+            wx.onDeviceMotionChange((result) => {
+              console.log('获取手机方向数据',result)
+              if(result.beta > 45 || result.beta < -45){
+                // console.log('竖屏')
+                that.setData({
+                  portrait:true,
+                  landscape:false,
+                })
+              }else{
+                that.setData({
+                  portrait:false,
+                  landscape:true,
+                })
+              }
+            })
+          }
+        })
+      }else{
+        // 取消监听
+        wx.offDeviceMotionChange()
+      }
+    }
   },
   /**
    * 组件的方法列表
@@ -72,6 +111,7 @@ Component({
         title: '数据处理中...',
         mask: true
       })
+
 
       var that = this
       // 创建相机
@@ -206,14 +246,30 @@ Component({
               that.canvas.rect(0, 0, that.data.width, that.data.height - 170)
               that.canvas.clip()
 
-              that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
 
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
-              that.canvas.setFontSize(16);
-              that.canvas.setFillStyle('#fff');
-              that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+
+              that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
+              // 竖屏拍摄文字
+              if(that.data.portrait) {
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+  
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
+                that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, that.data.height - 180)
+              }else{
+                // if(that.data.landscape)
+                // 横屏拍摄文字
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.setFontSize(16);
+                that.canvas.setFillStyle('#fff');
+                that.canvas.rotate(Math.PI * 180 / 360)
+                that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, -30)
+                that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, -10)
+              }
+
 
               that.canvas.draw()
 

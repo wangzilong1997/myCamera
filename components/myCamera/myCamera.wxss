@@ -57,11 +57,18 @@
   overflow: hidden;
 }
 
-.watermark{
+.watermark-portrait{
   position: fixed;
   left: 5vw;
   top: 70vh;
   color: white;
+}
+.watermark-landscape{
+  position: fixed;
+  left: -30vw;
+  top: 20vh;
+  color: white;
+  transform: rotate(90deg);
 }
 .watermark-item{
   width: 80vw;
