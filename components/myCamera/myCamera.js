@@ -35,7 +35,7 @@ Component({
     // 竖屏幕
     portrait:false,
     // 横屏幕
-    landscape:false,
+    landscape:false ,
   },
   lifetimes: {
     attached: function () {
@@ -251,9 +251,11 @@ Component({
               that.canvas.drawImage(path, 0, 0, that.data.width / 1, that.data.height / 1)
               // 竖屏拍摄文字
               if(that.data.portrait) {
+                that.canvas.setFillStyle('rgba(0, 0, 0,.3)')
+                that.canvas.fillRect(20, that.data.height - 215, 280, 40)
+
                 that.canvas.setFontSize(16);
                 that.canvas.setFillStyle('#fff');
-  
                 that.canvas.setFontSize(16);
                 that.canvas.setFillStyle('#fff');
                 that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, that.data.height - 200)
@@ -261,13 +263,20 @@ Component({
               }else{
                 // if(that.data.landscape)
                 // 横屏拍摄文字
+
+                that.canvas.setFillStyle('rgba(0, 0, 0,.3)')
+                that.canvas.fillRect(6, 15, 40, 280)
+
                 that.canvas.setFontSize(16);
                 that.canvas.setFillStyle('#fff');
                 that.canvas.setFontSize(16);
                 that.canvas.setFillStyle('#fff');
+
                 that.canvas.rotate(Math.PI * 180 / 360)
+
                 that.canvas.fillText(`拍摄时间：${that.data.currentTime}`, 20, -30)
                 that.canvas.fillText(`项目名称：${that.data.projectName}`, 20, -10)
+
               }
 
 
