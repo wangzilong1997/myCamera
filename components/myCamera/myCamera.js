@@ -44,9 +44,6 @@ Component({
       wx.getStorageSync('project_name') && this.setData({
         projectName: wx.getStorageSync('project_name')
       })
-      this.setData({
-        _that:this
-      })
 
 
     
