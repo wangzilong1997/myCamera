@@ -21,7 +21,10 @@
         <cover-view capture-bind:tap="cancel">取消</cover-view>
       </cover-view>
       <cover-view class="bottom-item">
-        <cover-view class="take" capture-bind:tap="take"></cover-view>
+        <cover-view class="takebtn1" capture-bind:tap="take">
+          <cover-view class="takebtn">
+          </cover-view>
+        </cover-view>
       </cover-view>
       <cover-view class="cancel bottom-item">
         <cover-view capture-bind:tap="cancel" wx:if="{{false}}">取消</cover-view>
