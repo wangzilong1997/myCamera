@@ -46,6 +46,17 @@
   overflow: hidden;
 }
 
+.myCameraComponent{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  overflow: hidden;
+}
+
 .myPicture{
   position: fixed;
   width: 100vw;
@@ -60,7 +71,7 @@
 .watermark-portrait{
   position: fixed;
   left: 5vw;
-  top: 70vh;
+  top: 68vh;
   color: white;
   background: rgba(0, 0, 0,.3);
 }
@@ -70,6 +81,14 @@
   top: 20vh;
   color: white;
   transform: rotate(90deg);
+  background: rgba(0, 0, 0,.3);
+}
+.watermark-landscape-right{
+  position: fixed;
+  left: 52vw;
+  top: 20vh;
+  color: white;
+  transform: rotate(270deg);
   background: rgba(0, 0, 0,.3);
 }
 .watermark-item{
@@ -111,6 +130,7 @@
   
 }
 
+
 .takebtn1{
   width:60px;
   height:60px;
@@ -133,3 +153,61 @@
 }
 
 
+.w-harf-circle-b:first-child{
+  margin-top: 25rpx;
+  margin-left: 25rpx;
+}
+.w-harf-circle-b:last-child{
+  margin-top: 7rpx;
+  margin-left: 25rpx;
+}
+.w-harf-circle-b{
+  width:40rpx;
+  height:20rpx;
+  border:5rpx solid white;
+  border-radius: 50%/0 0 100% 100% ;
+  border-top: none;
+  position:relative;
+  overflow: visible;
+}
+.w-harf-circle-b:before{
+  position:absolute;
+  content:'';
+  right:-8rpx;
+  width:10rpx;
+  height:10rpx;
+  border:5rpx solid white;
+  border-left:0;
+  border-bottom:0;                
+  background:transparent;
+  transform: rotate(330deg);
+  z-index: 999;
+  overflow: visible;
+}
+
+.w-harf-circle-t{
+
+  transform: rotate(180deg);
+}
+.w-change-circle{
+  transform: rotate(13deg);
+  width:100rpx;
+  height: 100rpx;
+  /* margin-left: 20rpx; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+
+}
+.w-circle{
+  /* width: 100rpx;
+  height: 100%;
+  display: flex;
+  justify-content: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.w-dspn{
+  display: none;
+}

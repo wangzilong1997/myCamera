@@ -3,15 +3,25 @@
     <!-- <cover-view class="container">
     <cover-view class="top">
     </cover-view>
-
+    
   </cover-view> -->
+    <!-- <textarea placeholder="hellooooooooo" class="myTextarea">
+      helooooooooo
+    </textarea> -->
     <!-- 竖屏 -->
     <cover-view class="watermark-portrait" wx:if="{{portrait}}">
+      <cover-view class="watermark-item">拍摄地址：{{district}}</cover-view>
       <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
       <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
     </cover-view>
     <!-- 横屏 -->
-    <cover-view class="watermark-landscape" wx:if="{{landscape}}">
+    <cover-view class="watermark-landscape" wx:if="{{landscape && !Gamma}}">
+      <cover-view class="watermark-item">拍摄地址：{{district}}</cover-view>
+      <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
+      <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
+    </cover-view>
+    <cover-view class="watermark-landscape-right" wx:if="{{landscape && Gamma}}">
+      <cover-view class="watermark-item">拍摄地址：{{district}}</cover-view>
       <cover-view class="watermark-item">拍摄时间：{{currentTime}}</cover-view>
       <cover-view class="watermark-item">项目名称：{{projectName}}</cover-view>
     </cover-view>
@@ -27,7 +37,14 @@
         </cover-view>
       </cover-view>
       <cover-view class="cancel bottom-item">
-        <cover-view capture-bind:tap="cancel" wx:if="{{false}}">取消</cover-view>
+        <!-- <cover-view capture-bind:tap="cancel" wx:if="{{false}}">取消</cover-view> -->
+        <cover-view class="w-circle w-dspn">
+          <cover-view class="w-change-circle">
+            <cover-view class="w-harf-circle-b w-harf-circle-t"></cover-view>
+            <cover-view class="w-harf-circle-b"></cover-view>
+          </cover-view>
+        </cover-view>
+
       </cover-view>
     </cover-view>
   </camera>
@@ -43,7 +60,7 @@
           确定
       </cover-view>
     </cover-view> -->
-  <canvas canvas-id="{{'image-canvas' + timestamp}}" class="image-canvas">
+  <canvas canvas-id="{{'image-canvas'}}" class="image-canvas">
     <cover-view class="picBtns">
       <cover-view class="picBtn picBtnLeft">
         <cover-view class="mybtn" capture-bind:tap="reTake">重拍</cover-view>
